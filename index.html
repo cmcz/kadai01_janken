@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+    <link rel="stylesheet" href="./css/index.css">
+    <title>じゃんけんバトル</title>
+</head>
+
+<body>
+    <header>
+        <div class="titleblock">
+            <img src="./img/dice.png" width="60" alt="Dice">
+            <p>じゃんけんで猫と勝負！</p>
+        </div>
+
+    </header>
+
+    <main>
+        <section>
+            <div class="mainvisual">
+                <h1>猫と一緒にじゃんけんバトル</h1>
+                <h2>ボタンの一つをクリックして、グー、チョキ、またはパーを選んでください。そして、猫ちゃんが何を出すか見てみよう！</h2>
+            </div>
+
+        </section>
+        <section class="user_choice">
+            <div class="choice-list">
+                <button id="user_rock" type="button" class="text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">グー</button>
+                <button id="user_paper" type="button" class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">パー</button>
+                <button id="user_scissor" type="button" class="text-white bg-gradient-to-r from-purple-500 to-pink-500 hover:bg-gradient-to-l focus:ring-4 focus:outline-none focus:ring-purple-200 dark:focus:ring-purple-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">チョキ</button>
+                <button id="random" type="button" class="text-white bg-gradient-to-br from-pink-500 to-orange-400 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-pink-200 dark:focus:ring-pink-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">ランダム</button>
+            </div>
+        </section>
+
+        <section>
+
+
+            <div id="popup_kitten_パー" class="popup">
+                <span id="close_popup_kitten_paper" class="close">&times;</span>
+                <div class="popup_text">
+                    <h2>君が出したのは：</h2>
+                    <h3 class="userChoice"></h3>
+                    <img src="./img/kitten-paper.jpg" alt="" class="popup-content">
+                    <h2>猫ちゃんが出したのは：</h2>
+                    <h3>パー！</h3>
+                    <h1 class="result"></h1>
+                </div>
+
+            </div>
+            <div id="popup_kitten_グー" class="popup">
+
+                <span id="close_popup_kitten_rock" class="close">&times;</span>
+                <h2>君が出したのは：</h2>
+                <h3 class="userChoice"></h3>
+
+                <img src="./img/kitten-rock.jpg" alt="" class="popup-content">
+                <h2>猫ちゃんが出したのは：</h2>
+                <h3>グー</h3>
+                <h1 class="result"></h1>
+            </div>
+            <div id="popup_kitten_チョキ" class="popup">
+                <span id="close_popup_kitten_scissor" class="close">&times;</span>
+                <h2>君が出したのは：</h2>
+                <h3 class="userChoice"></h3>
+
+                <img src="./img/kitten-scissor.jpg" alt="" class="popup-content">
+                <h2>猫ちゃんが出したのは：</h2>
+                <h3>チョキ</h3>
+                <h1 class="result"></h1>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <div>Copyright 2024 (C)</div>
+    </footer>
+
+    <script>
+        // Random Function
+        function randomChoice() {
+            const choices = ["グー", "パー", "チョキ"];
+            var randomIndex = Math.floor(Math.random() * choices.length);
+            return choices[randomIndex];
+        }
+
+        function getResult(userChoice) {
+            // Update user choice
+            let uc_elements = document.getElementsByClassName("userChoice");
+            for (let i = 0; i < uc_elements.length; i++) {
+                uc_elements[i].innerHTML = userChoice;
+            }
+
+            // Update Kitten Image
+            var kittenChoice = randomChoice();
+
+            // Update result
+            if (userChoice == kittenChoice) {
+                var result = "君は猫ちゃんと引き分けになったよ！";
+            } else if ((userChoice == "グー" && kittenChoice == "チョキ") ||
+                (userChoice == "パー" && kittenChoice == "グー") ||
+                (userChoice == "チョキ" && kittenChoice == "パー")) {
+                var result = "君は勝ったよ！";
+            } else {
+                var result = "残念！君は負けたよ！";
+            }
+
+            let result_elements = document.getElementsByClassName("result");
+            for (let i = 0; i < result_elements.length; i++) {
+                result_elements[i].innerHTML = result;
+            }
+
+            // Show the pop up
+            var popup = document.getElementById('popup_kitten_' + kittenChoice);
+            popup.style.display = 'block';
+        }
+
+        $("#user_rock").on("click", function() {
+            getResult("グー");
+        });
+
+        $("#user_paper").on("click", function() {
+            getResult("パー");
+        });
+
+        $("#user_scissor").on("click", function() {
+            getResult("チョキ");
+        });
+
+        $("#random").on("click", function() {
+            const userChoice = randomChoice();
+            getResult(userChoice);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            var close_k_rock = document.getElementById('close_popup_kitten_rock');
+            var close_k_paper = document.getElementById('close_popup_kitten_paper');
+            var close_k_scissor = document.getElementById('close_popup_kitten_scissor');
+            var k_rock = document.getElementById('popup_kitten_グー');
+            var k_paper = document.getElementById('popup_kitten_パー');
+            var k_scissor = document.getElementById('popup_kitten_チョキ');
+
+            close_k_rock.onclick = function() {
+                k_rock.style.display = 'none';
+            }
+
+            close_k_paper.onclick = function() {
+                k_paper.style.display = 'none';
+            }
+
+            close_k_scissor.onclick = function() {
+                k_scissor.style.display = 'none';
+            }
+
+            window.onclick = function(event) {
+                if (event.target == k_rock || event.target == k_paper || event.target == k_scissor) {
+                    k_rock.style.display = 'none';
+                    k_paper.style.display = 'none';
+                    k_scissor.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
